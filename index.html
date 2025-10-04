@@ -115,9 +115,9 @@
   </footer>
   <script>
   const items = [
-    { codigo:"A03U", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrilla:38046 },
-    { codigo:"A04R", desc:"Colocación acometida aérea Cu neutro conc.", cliente:147240, cuadrilla:91267 },
-    { codigo:"A05U", desc:"Colocación acometida aérea Al neutro conc.", cliente:157300, cuadrilla:100649 }
+    { codigo:"A03U", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrillaU:38046, cuadrillaR:40000 },
+    { codigo:"A04R", desc:"Colocación acometida aérea Cu neutro conc.", cliente:147240, cuadrillaU:91267, cuadrillaR:93000 },
+    { codigo:"A05U", desc:"Colocación acometida aérea Al neutro conc.", cliente:157300, cuadrillaU:100649, cuadrillaR:102000 }
   ];
 
   const contenedor = document.getElementById("contenedor-items");
@@ -128,16 +128,24 @@
     card.innerHTML = `
       <div class="item">${it.codigo}</div>
       <div class="desc">${it.desc}</div>
-      <div class="valores"><div>Valor Cliente:</div><div>${formato(it.cliente)}</div></div>
-      ${it.cuadrilla > 0 ? `<div class="valores"><div>Valor Cuadrilla:</div><div>${formato(it.cuadrilla)}</div></div>` : ""}
+
+      <div class="valores">
+        <div>Valor Cliente:</div>
+        <div>${formato(it.cliente)}</div>
+      </div>
+
       <div class="cantidad-box">
         <label>Cantidad:</label>
         <input type="number" min="0" value="" id="cant-${i}">
       </div>
-      <div class="totales"><div>Total Cliente:</div><div id="totCliente-${i}"></div></div>
-      <div class="totales"><div>Total Cuadrilla:</div><div id="totCuad-${i}"></div></div>
+
+      <div class="totales">
+        <div>Total Cliente:</div>
+        <div id="totCliente-${i}"></div>
+      </div>
     `;
     contenedor.appendChild(card);
+
     document.getElementById(`cant-${i}`).addEventListener("input", actualizar);
   });
 
@@ -146,27 +154,29 @@
   }
 
   function actualizar() {
-    let sumaCant = 0, totalCli = 0, totalCua = 0;
+    let sumaCant = 0, totalCli = 0, totalCuaU = 0, totalCuaR = 0;
+
     items.forEach((it, i) => {
-      const input = document.getElementById(`cant-${i}`);
-      const cant = parseFloat(input.value) || 0;
+      const cant = parseFloat(document.getElementById(`cant-${i}`).value) || 0;
+      sumaCant += cant;
 
       const totCli = cant * it.cliente;
-      const totCua = cant * it.cuadrilla;
+      const totCuaU = cant * it.cuadrillaU;
+      const totCuaR = cant * it.cuadrillaR;
 
-      sumaCant += cant;
       totalCli += totCli;
-      totalCua += totCua;
+      totalCuaU += totCuaU;
+      totalCuaR += totCuaR;
 
-      // Mostrar solo si hay cantidad
       document.getElementById(`totCliente-${i}`).innerText = cant > 0 ? formato(totCli) : "";
-      document.getElementById(`totCuad-${i}`).innerText = cant > 0 ? formato(totCua) : "";
     });
 
     document.getElementById("sumaCantidades").innerText = sumaCant;
     document.getElementById("totalCliente").innerText = formato(totalCli);
-    document.getElementById("totalCuadrilla").innerText = formato(totalCua);
+    document.getElementById("totalCuadrillaUrbana").innerText = formato(totalCuaU);
+    document.getElementById("totalCuadrillaRural").innerText = formato(totalCuaR);
   }
 </script>
+
 </body>
 </html>
