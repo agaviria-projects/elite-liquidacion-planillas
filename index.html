@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Elite Ingenieros | Planillas de Liquidación HV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f3f3f3;
+    }
+
+    /* ENCABEZADO */
+    header {
+      display: flex;
+      align-items: center;
+      background-color: #f3f3f3;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header img {
+      width: 60px;
+      height: auto;
+      margin-right: 15px;
+    }
+
+    header h2 {
+      color: #004b2d;
+      margin: 0;
+      font-size: 22px;
+    }
+
+    /* TARJETAS */
+    .card {
+      background: #fff;
+      margin: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .item { font-weight: bold; font-size: 18px; color: #222; margin-bottom: 5px; }
+    .desc { font-size: 14px; color: #444; margin-bottom: 10px; }
+
+    .valores {
+      display: flex; justify-content: space-between;
+      font-size: 14px; margin: 3px 0;
+    }
+
+    .cantidad-box {
+      display: flex; align-items: center;
+      margin: 10px 0;
+    }
+
+    .cantidad-box label { margin-right: 10px; font-weight: bold; }
+    input[type="number"] {
+      width: 90px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .totales {
+      display: flex; justify-content: space-between;
+      font-size: 14px; margin-top: 5px;
+    }
+
+    /* RESULTADOS */
+    .resumen {
+      background: #007f4f;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 20px;
+      padding: 20px;
+      font-size: 18px;
+    }
+
+    .resumen div {
+      display: flex; justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo_elite.png" alt="Elite Ingenieros">
+    <h2>Planillas de Liquidación HV</h2>
+  </header>
+
+  <div id="contenedor-items"></div>
+
+  <div class="resumen">
+    <div><span>SUMA CANTIDADES:</span><span id="sumaCantidades">0</span></div>
+    <div><span>VALOR ACTA EPM:</span><span id="totalCliente">$ 0</span></div>
+    <div><span>VALOR CUADRILLA:</span><span id="totalCuadrilla">$ 0</span></div>
+  </div>
+
+  <footer>
+    © 2025 Elite Ingenieros S.A.S. | Desarrollado por Héctor Gaviria
+  </footer>
+
+  <script>
+    const items = [
+      { codigo:"A03U", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrilla:38046 },
+      { codigo:"A04R", desc:"Colocación acometida aérea Cu neutro conc.", cliente:147240, cuadrilla:91267 },
+      { codigo:"A05U", desc:"Colocación acometida aérea Al neutro conc.", cliente:157300, cuadrilla:100649 }
+      // Aquí agregas los demás ítems
+    ];
+
+    const contenedor = document.getElementById("contenedor-items");
+
+    items.forEach((it, i) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="item">${it.codigo}</div>
+        <div class="desc">${it.desc}</div>
+        <div class="valores"><div>Valor Cliente:</div><div>$ ${it.cliente.toLocaleString('es-CO')}</div></div>
+        <div class="valores"><div>Valor Cuadrilla:</div><div>$ ${it.cuadrilla.toLocaleString('es-CO')}</div></div>
+        <div class="cantidad-box">
+          <label>Cantidad:</label>
+          <input type="number" min="0" value="0" id="cant-${i}">
+        </div>
+        <div class="totales"><div>Total Cliente:</div><div id="totCliente-${i}">$ 0</div></div>
+        <div class="totales"><div>Total Cuadrilla:</div><div id="totCuad-${i}">$ 0</div></div>
+      `;
+      contenedor.appendChild(card);
+      document.getElementById(`cant-${i}`).addEventListener("input", actualizar);
+    });
+
+    function actualizar() {
+      let sumaCant = 0, totalCli = 0, totalCua = 0;
+      items.forEach((it, i) => {
+        const cant = parseFloat(document.getElementById(`cant-${i}`).value) || 0;
+        sumaCant += cant;
+        const totCli = cant * it.cliente;
+        const totCua = cant * it.cuadrilla;
+        totalCli += totCli;
+        totalCua += totCua;
+        document.getElementById(`totCliente-${i}`).innerText = "$ " + totCli.toLocaleString("es-CO");
+        document.getElementById(`totCuad-${i}`).innerText = "$ " + totCua.toLocaleString("es-CO");
+      });
+      document.getElementById("sumaCantidades").innerText = sumaCant;
+      document.getElementById("totalCliente").innerText = "$ " + totalCli.toLocaleString("es-CO");
+      document.getElementById("totalCuadrilla").innerText = "$ " + totalCua.toLocaleString("es-CO");
+    }
+  </script>
+</body>
+</html>
