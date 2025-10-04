@@ -113,52 +113,60 @@
   <footer>
     © 2025 Elite Ingenieros S.A.S. | Desarrollado por Héctor Gaviria
   </footer>
-
   <script>
-    const items = [
-      { codigo:"A03U", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrilla:38046 },
-      { codigo:"A04R", desc:"Colocación acometida aérea Cu neutro conc.", cliente:147240, cuadrilla:91267 },
-      { codigo:"A05U", desc:"Colocación acometida aérea Al neutro conc.", cliente:157300, cuadrilla:100649 }
-      // Aquí agregas los demás ítems
-    ];
+  const items = [
+    { codigo:"A03U", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrilla:38046 },
+    { codigo:"A04R", desc:"Colocación acometida aérea Cu neutro conc.", cliente:147240, cuadrilla:91267 },
+    { codigo:"A05U", desc:"Colocación acometida aérea Al neutro conc.", cliente:157300, cuadrilla:100649 }
+  ];
 
-    const contenedor = document.getElementById("contenedor-items");
+  const contenedor = document.getElementById("contenedor-items");
 
+  items.forEach((it, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="item">${it.codigo}</div>
+      <div class="desc">${it.desc}</div>
+      <div class="valores"><div>Valor Cliente:</div><div>${formato(it.cliente)}</div></div>
+      ${it.cuadrilla > 0 ? `<div class="valores"><div>Valor Cuadrilla:</div><div>${formato(it.cuadrilla)}</div></div>` : ""}
+      <div class="cantidad-box">
+        <label>Cantidad:</label>
+        <input type="number" min="0" value="" id="cant-${i}">
+      </div>
+      <div class="totales"><div>Total Cliente:</div><div id="totCliente-${i}"></div></div>
+      <div class="totales"><div>Total Cuadrilla:</div><div id="totCuad-${i}"></div></div>
+    `;
+    contenedor.appendChild(card);
+    document.getElementById(`cant-${i}`).addEventListener("input", actualizar);
+  });
+
+  function formato(num) {
+    return "$ " + num.toLocaleString("es-CO");
+  }
+
+  function actualizar() {
+    let sumaCant = 0, totalCli = 0, totalCua = 0;
     items.forEach((it, i) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="item">${it.codigo}</div>
-        <div class="desc">${it.desc}</div>
-        <div class="valores"><div>Valor Cliente:</div><div>$ ${it.cliente.toLocaleString('es-CO')}</div></div>
-        <div class="valores"><div>Valor Cuadrilla:</div><div>$ ${it.cuadrilla.toLocaleString('es-CO')}</div></div>
-        <div class="cantidad-box">
-          <label>Cantidad:</label>
-          <input type="number" min="0" value="0" id="cant-${i}">
-        </div>
-        <div class="totales"><div>Total Cliente:</div><div id="totCliente-${i}">$ 0</div></div>
-        <div class="totales"><div>Total Cuadrilla:</div><div id="totCuad-${i}">$ 0</div></div>
-      `;
-      contenedor.appendChild(card);
-      document.getElementById(`cant-${i}`).addEventListener("input", actualizar);
+      const input = document.getElementById(`cant-${i}`);
+      const cant = parseFloat(input.value) || 0;
+
+      const totCli = cant * it.cliente;
+      const totCua = cant * it.cuadrilla;
+
+      sumaCant += cant;
+      totalCli += totCli;
+      totalCua += totCua;
+
+      // Mostrar solo si hay cantidad
+      document.getElementById(`totCliente-${i}`).innerText = cant > 0 ? formato(totCli) : "";
+      document.getElementById(`totCuad-${i}`).innerText = cant > 0 ? formato(totCua) : "";
     });
 
-    function actualizar() {
-      let sumaCant = 0, totalCli = 0, totalCua = 0;
-      items.forEach((it, i) => {
-        const cant = parseFloat(document.getElementById(`cant-${i}`).value) || 0;
-        sumaCant += cant;
-        const totCli = cant * it.cliente;
-        const totCua = cant * it.cuadrilla;
-        totalCli += totCli;
-        totalCua += totCua;
-        document.getElementById(`totCliente-${i}`).innerText = "$ " + totCli.toLocaleString("es-CO");
-        document.getElementById(`totCuad-${i}`).innerText = "$ " + totCua.toLocaleString("es-CO");
-      });
-      document.getElementById("sumaCantidades").innerText = sumaCant;
-      document.getElementById("totalCliente").innerText = "$ " + totalCli.toLocaleString("es-CO");
-      document.getElementById("totalCuadrilla").innerText = "$ " + totalCua.toLocaleString("es-CO");
-    }
-  </script>
+    document.getElementById("sumaCantidades").innerText = sumaCant;
+    document.getElementById("totalCliente").innerText = formato(totalCli);
+    document.getElementById("totalCuadrilla").innerText = formato(totalCua);
+  }
+</script>
 </body>
 </html>
