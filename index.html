@@ -2,33 +2,106 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Planillas de Liquidación HV</title>
+  <title>Elite Ingenieros | Planillas de Liquidación HV</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; margin: 10px; background: #f4f4f4; }
-    h2 { text-align: center; margin-bottom: 15px; color: #0d3d23; }
-
-    .card {
-      background: white; padding: 12px; margin-bottom: 15px;
-      border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f3f3f3;
     }
-    .item { font-weight: bold; font-size: 18px; margin-bottom: 3px; color:#0d3d23; }
-    .desc { font-size: 14px; margin-bottom: 8px; color:#444; }
+
+    /* ENCABEZADO */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* centra horizontalmente */
+      background-color: #f3f3f3;
+      padding: 10px;
+    }
+    .logo {
+        width: 55px;
+        height: auto;
+        margin-right: 10px;
+      }
+    header img {
+      width: 60px;
+      height: auto;
+      margin-right: 15px;
+    }
+      header h2 {
+        color: #004b2d;
+        font-weight: bold;
+      }
+
+    /* TARJETAS */
+    .card {
+      background: #fff;
+      margin: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .item { font-weight: bold; font-size: 18px; color: #222; margin-bottom: 5px; }
+    .desc { font-size: 14px; color: #444; margin-bottom: 10px; }
+
     .valores {
       display: flex; justify-content: space-between;
-      font-size: 14px; margin-bottom: 6px;
+      font-size: 14px; margin: 3px 0;
     }
-    .valores span { font-weight: bold; }
-    label { font-size: 14px; margin-right: 5px; }
-    input[type="number"] {
-      width: 80px; padding: 5px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 4px;
-      font-size: 16px; text-align: center;
-    }
-    .totales { margin-top: 5px; font-size: 14px; }
 
+    .cantidad-box {
+      display: flex; align-items: center;
+      margin: 10px 0;
+    }
+
+    .cantidad-box label { margin-right: 10px; font-weight: bold; }
+    input[type="number"] {
+      width: 90px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .totales {
+      display: flex; justify-content: space-between;
+      font-size: 14px; margin-top: 5px;
+    }
+
+    /* RESULTADOS */
     .resumen {
-      background: linear-gradient(135deg, #006837, #00a859);
+      background: #007f4f;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 20px;
+      padding: 20px;
+      font-size: 18px;
+    }
+
+    .resumen div {
+      display: flex; justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .resumen span:last-child {
+      float: right;
+      text-align: right;
+      max-width: 50%;
+      overflow-wrap: break-word;
+    }
+        .resumen {
+      background: #008c4a;
       color: white;
       padding: 15px;
       border-radius: 10px;
@@ -40,98 +113,101 @@
       gap: 6px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
     }
+    
     .resumen div {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       padding-bottom: 3px;
     }
-    .resumen div:last-child { border-bottom: none; }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #444;
-      margin-top: 20px;
+    
+    .resumen div:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
 <body>
-  <h2>Planillas de Liquidación HV</h2>
+      <header>
+        <img src="elite.png" alt="Elite Ingenieros" class="logo">
+        <h2>Planillas de Liquidación HV</h2>
+      </header>
 
   <div id="contenedor-items"></div>
 
-   <div class="resumen">
+     <div class="resumen">
         <div><span>SUMA CANTIDADES:</span> <span id="sumaCantidades">0</span></div>
         <div><span>VALOR ACTA EPM:</span> <span id="totalCliente">$ 0</span></div>
         <div><span>VALOR CUADRILLA URBANA:</span> <span id="totalUrbana">$ 0</span></div>
         <div><span>VALOR CUADRILLA RURAL:</span> <span id="totalRural">$ 0</span></div>
-  </div>
-
-  <footer>© 2025 Elite Ingenieros S.A.S. | Desarrollado por Héctor Gaviria</footer>
-
+    </div>
+  <footer>
+    © 2025 Elite Ingenieros S.A.S.
+  </footer>
   <script>
-    // === ITEMS ===
-    const items = [
-      { codigo:"A0U/R",desc:"Conexión de acometida a la red de distribución secundaria", cliente:108551, cuadrillaU:68216,cuadrillaR:68216 },
-      { codigo:"A03U/R", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrillaU:38046, cuadrillaR:41356 },
-      { codigo:"A04U/R", desc:"Actividad de colocación de acometida aérea en cable cobre con neutro concéntrico", cliente:147240, cuadrillaU:91267, cuadrillaR:91267 },
-      { codigo:"A05U/R", desc:"Actividad de colocación de acometida aérea en cable aluminio con neutro concéntrico", cliente:157300, cuadrillaU:100648, cuadrillaR:100648 }
-      { codigo:"A06U/R", desc:"Actividad de colocación de acometida aérea en cable cobre con neutro concéntrico", cliente:80719, cuadrillaU:59128, cuadrillaR:63768 }
-      
-    ];
+  const items = [
+    { codigo:"A03U", desc:"Instalación acometida caja multimedidores", cliente:70290, cuadrillaU:38046, cuadrillaR:40000 },
+    { codigo:"A04R", desc:"Colocación acometida aérea Cu neutro conc.", cliente:147240, cuadrillaU:91267, cuadrillaR:93000 },
+    { codigo:"A05U", desc:"Colocación acometida aérea Al neutro conc.", cliente:157300, cuadrillaU:100649, cuadrillaR:102000 }
+  ];
 
-    const contenedor = document.getElementById("contenedor-items");
+  const contenedor = document.getElementById("contenedor-items");
 
-    // === Generar tarjetas ===
-    items.forEach((it, index) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="item">${it.codigo}</div>
-        <div class="desc">${it.desc}</div>
-        <div class="valores">
-          <div>Valor Cliente: <span>${formato(it.cliente)}</span></div>
-        </div>
-        <div>
-          <label>Cantidad:</label>
-          <input type="number" min="0" value="0" id="cant-${index}" />
-        </div>
-        <div class="totales">Total Cliente: <span id="totCliente-${index}">$ 0</span></div>
-      `;
-      contenedor.appendChild(card);
-      document.getElementById(`cant-${index}`).addEventListener("input", actualizar);
+  items.forEach((it, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="item">${it.codigo}</div>
+      <div class="desc">${it.desc}</div>
+
+      <div class="valores">
+        <div>Valor Cliente:</div>
+        <div>${formato(it.cliente)}</div>
+      </div>
+
+      <div class="cantidad-box">
+        <label>Cantidad:</label>
+        <input type="number" min="0" value="" id="cant-${i}">
+      </div>
+
+      <div class="totales">
+        <div>Total Cliente:</div>
+        <div id="totCliente-${i}"></div>
+      </div>
+    `;
+    contenedor.appendChild(card);
+
+    document.getElementById(`cant-${i}`).addEventListener("input", actualizar);
+  });
+
+  function formato(num) {
+    return "$ " + num.toLocaleString("es-CO");
+  }
+
+  function actualizar() {
+    let sumaCant = 0, totalCli = 0, totalCuaU = 0, totalCuaR = 0;
+
+    items.forEach((it, i) => {
+      const cant = parseFloat(document.getElementById(`cant-${i}`).value) || 0;
+      sumaCant += cant;
+
+      const totCli = cant * it.cliente;
+      const totCuaU = cant * it.cuadrillaU;
+      const totCuaR = cant * it.cuadrillaR;
+
+      totalCli += totCli;
+      totalCuaU += totCuaU;
+      totalCuaR += totCuaR;
+
+      document.getElementById(`totCliente-${i}`).innerText = cant > 0 ? formato(totCli) : "";
     });
 
-    // === Formato pesos ===
-    function formato(num) {
-      return "$ " + num.toLocaleString("es-CO");
-    }
+    document.getElementById("sumaCantidades").innerText = sumaCant;
+    document.getElementById("totalCliente").innerText = formato(totalCli);
+    document.getElementById("totalCuadrillaUrbana").innerText = formato(totalCuaU);
+    document.getElementById("totalCuadrillaRural").innerText = formato(totalCuaR);
+  }
+</script>
 
-    // === Función de actualización ===
-    function actualizar() {
-      let sumaCant = 0, totalCli = 0, totalUrb = 0, totalRur = 0;
-
-      items.forEach((it, index) => {
-        const cant = parseInt(document.getElementById(`cant-${index}`).value) || 0;
-        sumaCant += cant;
-
-        const tCli = cant * it.cliente;
-        const tUrb = cant * it.cuadrillaU;
-        const tRur = cant * it.cuadrillaR;
-
-        totalCli += tCli;
-        totalUrb += tUrb;
-        totalRur += tRur;
-
-        document.getElementById(`totCliente-${index}`).innerText = formato(tCli);
-      });
-
-      document.getElementById("sumaCantidades").innerText = sumaCant;
-      document.getElementById("totalCliente").innerText = formato(totalCli);
-      document.getElementById("totalUrbana").innerText = formato(totalUrb);
-      document.getElementById("totalRural").innerText = formato(totalRur);
-    }
-  </script>
 </body>
 </html>
