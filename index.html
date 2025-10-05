@@ -152,6 +152,31 @@
   white-space: nowrap;  /* 🔹 evita que se divida en dos líneas */
   font-size: 20px;
 }
+ .footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.footer-logo {
+  width: 60px;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.footer-text {
+  font-size: 13px;
+  color: #444;
+}
+
+.footer-text .frase {
+  font-style: italic;
+  color: #008c4a; /* Verde corporativo */
+  font-weight: bold;
+}   
   </style>
 </head>
 <body>
@@ -175,12 +200,15 @@
         <div><span>VALOR CUADRILLA URBANA:</span> <span id="totalUrbana">$ 0</span></div>
         <div><span>VALOR CUADRILLA RURAL:</span> <span id="totalRural">$ 0</span></div>
     </div>
-  <footer>
-  <div class="footer-container">
-    <img src="elite.png" alt="Logo Elite Ingenieros" class="footer-logo">
-    <span>© 2025 Elite Ingenieros S.A.S.</span>
-  </div>
-  </footer>
+   <footer>
+      <div class="footer-container">
+        <img src="elite.png" alt="Logo Elite Ingenieros" class="footer-logo">
+        <div class="footer-text">
+          <span>© 2025 Elite Ingenieros S.A.S.</span><br>
+          <span class="frase">Pasión por lo que hacemos.</span>
+        </div>
+      </div>
+    </footer>
   <script>
   const items = [
     
