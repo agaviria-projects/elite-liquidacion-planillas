@@ -310,7 +310,19 @@
     document.getElementById("totalUrbana").innerText = formato(totalCuaU);
     document.getElementById("totalRural").innerText = formato(totalCuaR); 
   }
-</script>
+    function limpiarTodo() {
+  // Poner todos los campos en blanco
+  items.forEach((it, i) => {
+    document.getElementById(`cant-${i}`).value = "";
+    document.getElementById(`totCliente-${i}`).innerText = "";
+  });
 
+  // Resetear los totales
+  document.getElementById("sumaCantidades").innerText = "0";
+  document.getElementById("totalCliente").innerText = "$ 0";
+  document.getElementById("totalUrbana").innerText = "$ 0";
+  document.getElementById("totalRural").innerText = "$ 0";
+}
+</script>
 </body>
 </html>
