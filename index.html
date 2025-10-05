@@ -146,6 +146,12 @@
     width: 28px;
     height: auto;
   }
+    header h2 {
+  color: #004b2d;
+  font-weight: bold;
+  white-space: nowrap;  /* 🔹 evita que se divida en dos líneas */
+  font-size: 20px;
+}
   </style>
 </head>
 <body>
@@ -153,9 +159,16 @@
         <img src="elite.png" alt="Elite Ingenieros" class="logo">
         <h2>Planilla de Liquidación HV</h2>
       </header>
+       <div style="text-align: right; margin: 10px;">
+        <button onclick="limpiarTodo()" 
+                style="background-color:#007f4f; color:white; border:none; 
+                       padding:8px 16px; border-radius:6px; cursor:pointer;
+                       font-weight:bold;">
+          Limpiar Cantidades
+        </button>
+      </div>
 
   <div id="contenedor-items"></div>
-
      <div class="resumen">
         <div><span>SUMA CANTIDADES:</span> <span id="sumaCantidades">0</span></div>
         <div><span>VALOR ACTA EPM:</span> <span id="totalCliente">$ 0</span></div>
